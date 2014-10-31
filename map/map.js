@@ -107,21 +107,28 @@ var blankPluto = {
   opacity: 0
 };
 
-var likelyRentStab = new L.geoJson(bushwickPluto, {
-  style: myStyle,
-  filter: fun_rentStab,
-  onEachFeature: pop_pluto
-});
 
-var baseMaps = {
-  "Tax Lots": mainMap,
-  "Open Street Map": osmMap,
-  "Black and White": toner,
-  "Google Satellite": ggl
-};
-var overLays = {
-  "Rent-Stabilized": likelyRentStab
-};
+$.get("http://192.168.55.122:3500/pluto/pluto", {}, function (bushwickPluto) { 
 
-L.control.layers(baseMaps, overLays, {collapsed: false}).addTo(map);
+  console.log(bushwickPluto[0])
+  bushwickPluto.forEach(function(e) { e.properties = {} })
 
+
+  var likelyRentStab = new L.geoJson(bushwickPluto, {
+    style: myStyle,
+    onEachFeature: pop_pluto
+  });
+  
+  var baseMaps = {
+    "Tax Lots": mainMap,
+    "Open Street Map": osmMap,
+    "Black and White": toner,
+    "Google Satellite": ggl
+  };
+  var overLays = {
+    "Rent-Stabilized": likelyRentStab
+  };
+  
+  L.control.layers(baseMaps, overLays, {collapsed: false}).addTo(map);
+  
+})
